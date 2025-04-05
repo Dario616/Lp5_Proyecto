@@ -1,0 +1,61 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Home</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="calendar-container ion-text-center">
+    <h2>Tareas Pendientes</h2>
+    
+    <!-- Calendario básico usando componentes estándar de Ionic -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Calendario</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- Selector de fecha simple en lugar de calendario completo -->
+        <ion-datetime
+          presentation="date"
+          [(ngModel)]="selectedDate"
+          (ionChange)="onDateChange()"
+        ></ion-datetime>
+        
+        <!-- Lista de tareas pendientes -->
+        <ion-list>
+          <ion-list-header>
+            <ion-label>Tareas para hoy</ion-label>
+          </ion-list-header>
+          
+          <ion-item>
+            <ion-label>
+              <h3>Tarea 3 LP5</h3>
+              <p>10:00 PM - 12:00 PM</p>
+            </ion-label>
+            <ion-checkbox slot="end"></ion-checkbox>
+          </ion-item>
+          
+          <ion-item>
+            <ion-label>
+              <h3>Exponer</h3>
+              <p>6:00 PM - 8:00 PM</p>
+            </ion-label>
+            <ion-checkbox slot="end"></ion-checkbox>
+          </ion-item>
+          
+          <ion-item>
+            <ion-label>
+              <h3>Estudiar para el examen Adm 2</h3>
+              <p>4:00 PM - 4:30 PM</p>
+            </ion-label>
+            <ion-checkbox slot="end"></ion-checkbox>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  
+  <ion-button (click)="signOut()" expand="block" class="ion-margin-top">
+    Cerrar sesión
+  </ion-button>
+</ion-content>

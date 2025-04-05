@@ -1,0 +1,52 @@
+.tabla-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 auto;
+    padding: 10px;
+  }
+  
+  .tabla {
+    width: 100%;
+    min-width: 600px; 
+    border-collapse: collapse;
+    background-color: #2663fc;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .tabla thead {
+    background-color: #000000;
+    color: rgb(206, 206, 206);
+  }
+  
+  .tabla th,
+  .tabla td {
+    padding: 12px 16px;
+    text-align: left;
+    white-space: nowrap; 
+  }
+  
+  .tabla tbody tr:nth-child(even) {
+    background-color: #2e2e2e;
+  }
+  
+  .tabla tbody tr:hover {
+    background-color: #000000;
+    transition: background-color 0.3s ease;
+  }
+  
+  @media (max-width: 768px) {
+    .tabla-container {
+      padding: 5px;
+    }
+  
+    .tabla th,
+    .tabla td {
+      padding: 10px;
+      font-size: 14px;
+    }
+  }
+  
+  .titulo{
+    background-color: #000000;
+  }

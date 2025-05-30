@@ -1,22 +1,157 @@
 <ion-header>
   <ion-toolbar class="titulo">
-    <ion-title >Listado de Tickets</ion-title>
+    <ion-title>Listado de Tickets</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="tabla-container">
+  <!-- Botón para agregar nuevo ticket -->
+  <div class="action-buttons">
+    <ion-button
+      fill="solid"
+      color="primary"
+      (click)="showAddForm()"
+      *ngIf="!showForm"
+    >
+      <ion-icon name="add" slot="start"></ion-icon>
+      Agregar Ticket
+    </ion-button>
+  </div>
+
+  <!-- Formulario para agregar/editar -->
+  <ion-card *ngIf="showForm" class="form-card">
+    <ion-card-header>
+      <ion-card-title>
+        {{ isEditing ? 'Editar Ticket' : 'Nuevo Ticket' }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-md="6">
+            <ion-item>
+              <ion-label position="stacked">Asunto *</ion-label>
+              <ion-input
+                [(ngModel)]="formData.asunto"
+                placeholder="Ingrese el asunto"
+              >
+              </ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" size-md="6">
+            <ion-item>
+              <ion-label position="stacked">Estado</ion-label>
+              <ion-select [(ngModel)]="formData.estado">
+                <ion-select-option value="en espera"
+                  >En espera</ion-select-option
+                >
+                <ion-select-option value="en proceso"
+                  >En proceso</ion-select-option
+                >
+                <ion-select-option value="completado"
+                  >Completado</ion-select-option
+                >
+                <ion-select-option value="cancelado"
+                  >Cancelado</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-label position="stacked">Descripción *</ion-label>
+              <ion-textarea
+                [(ngModel)]="formData.descripcion"
+                placeholder="Descripción detallada"
+                rows="3"
+              >
+              </ion-textarea>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" size-md="6">
+            <ion-item>
+              <ion-label position="stacked">Precio</ion-label>
+              <ion-input
+                type="number"
+                [(ngModel)]="formData.precio"
+                placeholder="0"
+              >
+              </ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" size-md="6">
+            <ion-item>
+              <ion-label position="stacked">Fecha de Creación</ion-label>
+              <ion-input
+                [(ngModel)]="formData.fecha_creacion"
+                placeholder="DD/MM/YYYY"
+              >
+              </ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" size-md="6">
+            <ion-item>
+              <ion-label position="stacked">Asignado a</ion-label>
+              <ion-input
+                [(ngModel)]="formData.asignado_a"
+                placeholder="Nombre del responsable"
+              >
+              </ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" size-md="6">
+            <ion-item>
+              <ion-label position="stacked">Situación</ion-label>
+              <ion-input
+                [(ngModel)]="formData.situacion"
+                placeholder="Estado de la situación"
+              >
+              </ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!-- Botones del formulario -->
+      <div class="form-buttons">
+        <ion-button fill="outline" color="medium" (click)="cancelOperation()">
+          Cancelar
+        </ion-button>
+
+        <ion-button fill="solid" color="primary" (click)="saveMedico()">
+          {{ isEditing ? 'Actualizar' : 'Guardar' }}
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Tabla de tickets -->
+  <div class="tabla-container" *ngIf="!showForm">
     <table class="tabla">
       <thead>
         <tr>
           <th>ID</th>
           <th>Asunto</th>
-          <th>Descripcion</th>
+          <th>Descripción</th>
           <th>Estado</th>
           <th>Precio</th>
-          <th>Fecha Creacion</th>
+          <th>Fecha Creación</th>
           <th>Asignado A</th>
-          <th>Situacion</th>
+          <th>Situación</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -24,13 +159,49 @@
           <td>{{ medicos.id }}</td>
           <td>{{ medicos.asunto }}</td>
           <td>{{ medicos.descripcion }}</td>
-          <td>{{ medicos.estado }}</td>
+          <td>
+            <ion-badge
+              [color]="medicos.estado === 'completado' ? 'success' : 
+                       medicos.estado === 'en proceso' ? 'warning' : 
+                       medicos.estado === 'cancelado' ? 'danger' : 'medium'"
+            >
+              {{ medicos.estado }}
+            </ion-badge>
+          </td>
           <td>{{ medicos.precio | currency:'PYG':'symbol' }}</td>
           <td>{{ medicos.fecha_creacion }}</td>
           <td>{{ medicos.asignado_a }}</td>
-          <th>{{ medicos.situacion }}</th>
+          <td>{{ medicos.situacion }}</td>
+          <td class="action-column">
+            <ion-button
+              fill="clear"
+              size="small"
+              color="primary"
+              (click)="editMedico(medicos)"
+            >
+              <ion-icon name="create-outline"></ion-icon>
+            </ion-button>
+
+            <ion-button
+              fill="clear"
+              size="small"
+              color="danger"
+              (click)="confirmDelete(medicos)"
+            >
+              <ion-icon name="trash-outline"></ion-icon>
+            </ion-button>
+          </td>
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- Mensaje si no hay datos -->
+  <div *ngIf="Medicos.length === 0 && !showForm" class="no-data">
+    <ion-icon name="document-outline" size="large"></ion-icon>
+    <p>No hay tickets registrados</p>
+    <ion-button fill="outline" (click)="showAddForm()">
+      Agregar primer ticket
+    </ion-button>
   </div>
 </ion-content>

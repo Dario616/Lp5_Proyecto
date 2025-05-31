@@ -1,0 +1,329 @@
+.container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+// Tarjeta de información
+.info-card {
+  margin-bottom: 25px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
+  color: white;
+  
+  ion-card-content {
+    padding: 20px;
+  }
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  
+  ion-icon {
+    font-size: 2rem;
+    opacity: 0.8;
+  }
+  
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .stat-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    line-height: 1;
+  }
+  
+  .stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: 2px;
+  }
+}
+
+// Encabezados de sección
+.section-header {
+  margin: 30px 0 15px 0;
+  
+  h3 {
+    color: var(--ion-color-dark);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+}
+
+// Tarjetas de categorías
+.category-card {
+  margin-bottom: 16px;
+  border-radius: 16px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  }
+  
+  // Colores dinámicos para el borde izquierdo
+  &[data-color="primary"] { border-left-color: var(--ion-color-primary); }
+  &[data-color="success"] { border-left-color: var(--ion-color-success); }
+  &[data-color="danger"] { border-left-color: var(--ion-color-danger); }
+  &[data-color="warning"] { border-left-color: var(--ion-color-warning); }
+  &[data-color="secondary"] { border-left-color: var(--ion-color-secondary); }
+  &[data-color="tertiary"] { border-left-color: var(--ion-color-tertiary); }
+  &[data-color="medium"] { border-left-color: var(--ion-color-medium); }
+}
+
+.custom-category {
+  background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.category-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  flex: 1;
+}
+
+.category-icon-container {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  
+  // Colores dinámicos basados en el atributo data-color
+  &[data-color="primary"] { background: rgba(var(--ion-color-primary-rgb), 0.1); }
+  &[data-color="success"] { background: rgba(var(--ion-color-success-rgb), 0.1); }
+  &[data-color="danger"] { background: rgba(var(--ion-color-danger-rgb), 0.1); }
+  &[data-color="warning"] { background: rgba(var(--ion-color-warning-rgb), 0.1); }
+  &[data-color="secondary"] { background: rgba(var(--ion-color-secondary-rgb), 0.1); }
+  &[data-color="tertiary"] { background: rgba(var(--ion-color-tertiary-rgb), 0.1); }
+  &[data-color="medium"] { background: rgba(var(--ion-color-medium-rgb), 0.1); }
+  &[data-color="light"] { background: rgba(var(--ion-color-light-rgb), 0.3); }
+  
+  ion-icon {
+    font-size: 1.8rem;
+  }
+}
+
+.category-details {
+  flex: 1;
+  
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--ion-color-dark);
+    margin-bottom: 6px;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+}
+
+.usage-info {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  
+  ion-chip {
+    margin: 0;
+    font-size: 0.8rem;
+    height: 28px;
+    
+    ion-icon {
+      font-size: 0.9rem;
+      margin-right: 4px;
+    }
+  }
+}
+
+.category-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  
+  ion-button {
+    --border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    
+    &[disabled] {
+      opacity: 0.4;
+    }
+  }
+}
+
+// Estado vacío
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  
+  .empty-icon {
+    font-size: 4rem;
+    color: var(--ion-color-medium);
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    color: var(--ion-color-dark);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    font-size: 1rem;
+    margin-bottom: 30px;
+    line-height: 1.5;
+  }
+  
+  .init-btn {
+    --border-radius: 25px;
+    height: 50px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  
+  .add-custom-btn {
+    --border-radius: 25px;
+    height: 45px;
+    font-weight: 500;
+  }
+}
+
+// FAB personalizado
+ion-fab-button {
+  --background: var(--ion-color-primary);
+  --color: white;
+  --box-shadow: 0 4px 16px rgba(var(--ion-color-primary-rgb), 0.4);
+  
+  &:hover {
+    --background: var(--ion-color-primary-shade);
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .stats-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .stat-item {
+    justify-content: center;
+    text-align: center;
+    
+    div {
+      align-items: center;
+    }
+  }
+  
+  .category-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .category-actions {
+    align-self: stretch;
+    justify-content: space-around;
+  }
+  
+  .category-info {
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+  }
+  
+  .usage-info {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-info {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  
+  .category-actions {
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+  }
+}
+
+// Animaciones
+.category-card {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Personalización de chips según color
+ion-chip {
+  &[color="success"] {
+    --background: rgba(var(--ion-color-success-rgb), 0.1);
+    --color: var(--ion-color-success);
+  }
+  
+  &[color="medium"] {
+    --background: rgba(var(--ion-color-medium-rgb), 0.1);
+    --color: var(--ion-color-medium);
+  }
+  
+  &[color="secondary"] {
+    --background: rgba(var(--ion-color-secondary-rgb), 0.1);
+    --color: var(--ion-color-secondary);
+  }
+  
+  &[color="tertiary"] {
+    --background: rgba(var(--ion-color-tertiary-rgb), 0.1);
+    --color: var(--ion-color-tertiary);
+  }
+}

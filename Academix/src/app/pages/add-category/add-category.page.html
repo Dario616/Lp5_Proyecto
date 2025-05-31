@@ -1,0 +1,147 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/categories"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ isEditMode ? 'Editar' : 'Agregar' }} Categoría</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      
+      <!-- Vista previa de la categoría -->
+      <ion-card class="preview-card">
+        <ion-card-header>
+          <ion-card-title>Vista Previa</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="category-preview">
+            <div class="preview-icon-container" [attr.data-color]="form.value.color">
+              <ion-icon 
+                [name]="form.value.icon || 'pricetag-outline'" 
+                [color]="form.value.color || 'medium'">
+              </ion-icon>
+            </div>
+            <div class="preview-details">
+              <h3>{{ form.value.name || 'Nombre de categoría' }}</h3>
+              <p>{{ form.value.description || 'Descripción de la categoría' }}</p>
+              <ion-chip [color]="form.value.color || 'medium'" size="small">
+                <ion-label>{{ getColorName(form.value.color) }}</ion-label>
+              </ion-chip>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+      
+      <!-- Formulario -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Información de la Categoría</ion-card-title>
+        </ion-card-header>
+        
+        <ion-card-content>
+          
+          <!-- Nombre -->
+          <ion-item>
+            <ion-input 
+              formControlName="name"
+              label="Nombre *"
+              labelPlacement="floating"
+              placeholder="Ej: Examen Final"
+              type="text"
+              maxlength="30">
+            </ion-input>
+          </ion-item>
+          
+          <!-- Descripción -->
+          <ion-item>
+            <ion-textarea 
+              formControlName="description"
+              label="Descripción"
+              labelPlacement="floating"
+              placeholder="Descripción opcional de la categoría"
+              rows="3"
+              maxlength="100">
+            </ion-textarea>
+          </ion-item>
+          
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Selección de color -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Color de la Categoría</ion-card-title>
+        </ion-card-header>
+        
+        <ion-card-content>
+          <div class="color-grid">
+            <div 
+              *ngFor="let color of availableColors"
+              class="color-option"
+              [class.selected]="form.value.color === color.value"
+              (click)="selectColor(color.value)">
+              <div class="color-circle" [style.background-color]="color.hex">
+                <ion-icon 
+                  name="checkmark" 
+                  *ngIf="form.value.color === color.value"
+                  color="white">
+                </ion-icon>
+              </div>
+              <span class="color-name">{{ color.name }}</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Selección de ícono -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Ícono de la Categoría</ion-card-title>
+        </ion-card-header>
+        
+        <ion-card-content>
+          <div class="icon-grid">
+            <div 
+              *ngFor="let icon of availableIcons"
+              class="icon-option"
+              [class.selected]="form.value.icon === icon.value"
+              (click)="selectIcon(icon.value)">
+              <div class="icon-circle">
+                <ion-icon 
+                  [name]="icon.value" 
+                  [color]="form.value.icon === icon.value ? (form.value.color || 'primary') : 'medium'">
+                </ion-icon>
+              </div>
+              <span class="icon-name">{{ icon.name }}</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Botones -->
+      <div class="buttons-container">
+        <ion-button 
+          type="submit" 
+          expand="block" 
+          [disabled]="form.invalid"
+          class="submit-btn">
+          <ion-icon name="save-outline" slot="start"></ion-icon>
+          {{ isEditMode ? 'Actualizar' : 'Crear' }} Categoría
+        </ion-button>
+        
+        <ion-button 
+          expand="block" 
+          fill="outline" 
+          color="medium"
+          (click)="goBack()">
+          <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+          Cancelar
+        </ion-button>
+      </div>
+
+    </form>
+  </div>
+</ion-content>

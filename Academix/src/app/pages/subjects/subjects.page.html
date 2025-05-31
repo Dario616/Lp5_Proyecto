@@ -1,0 +1,136 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Mis Materias</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goToAddSubject()">
+        <ion-icon name="add" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    
+    <!-- Filtro por semestre -->
+    <ion-card class="filter-card">
+      <ion-card-content>
+        <ion-item>
+          <ion-select 
+            [(ngModel)]="selectedSemester"
+            (ionChange)="filterBySemester()"
+            placeholder="Filtrar por semestre"
+            interface="popover">
+            <ion-select-option value="all">Todos los semestres</ion-select-option>
+            <ion-select-option value="1">1er Semestre</ion-select-option>
+            <ion-select-option value="2">2do Semestre</ion-select-option>
+            <ion-select-option value="3">3er Semestre</ion-select-option>
+            <ion-select-option value="4">4to Semestre</ion-select-option>
+            <ion-select-option value="5">5to Semestre</ion-select-option>
+            <ion-select-option value="6">6to Semestre</ion-select-option>
+            <ion-select-option value="7">7mo Semestre</ion-select-option>
+            <ion-select-option value="8">8vo Semestre</ion-select-option>
+            <ion-select-option value="9">9no Semestre</ion-select-option>
+            <ion-select-option value="10">10mo Semestre</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Lista de materias -->
+    <div *ngIf="filteredSubjects.length > 0; else noSubjects">
+      <ion-card *ngFor="let subject of filteredSubjects" class="subject-card">
+        <ion-card-header>
+          <div class="card-header-content">
+            <div>
+              <ion-card-title>{{ subject.name }}</ion-card-title>
+              <ion-card-subtitle>{{ subject.code }}</ion-card-subtitle>
+            </div>
+            <ion-chip color="primary">
+              <ion-label>{{ subject.semester }}° Sem</ion-label>
+            </ion-chip>
+          </div>
+        </ion-card-header>
+
+        <ion-card-content>
+          <div class="subject-info">
+            <div class="info-item" *ngIf="subject.description">
+              <ion-icon name="information-circle-outline"></ion-icon>
+              <span>{{ subject.description }}</span>
+            </div>
+            
+            <div class="info-item">
+              <ion-icon name="school-outline"></ion-icon>
+              <span>{{ subject.credits }} créditos</span>
+            </div>
+            
+            <div class="info-item" *ngIf="subject.professor">
+              <ion-icon name="person-outline"></ion-icon>
+              <span>{{ subject.professor }}</span>
+            </div>
+            
+            <div class="info-item" *ngIf="subject.schedule">
+              <ion-icon name="time-outline"></ion-icon>
+              <span>{{ subject.schedule }}</span>
+            </div>
+          </div>
+
+          <!-- Botones de acción -->
+          <div class="action-buttons">
+            <ion-button 
+              size="small" 
+              fill="outline" 
+              (click)="editSubject(subject)">
+              <ion-icon name="create-outline" slot="start"></ion-icon>
+              Editar
+            </ion-button>
+            
+            <ion-button 
+              size="small" 
+              color="danger" 
+              fill="outline" 
+              (click)="confirmDelete(subject)">
+              <ion-icon name="trash-outline" slot="start"></ion-icon>
+              Eliminar
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Estado vacío -->
+    <ng-template #noSubjects>
+      <div class="empty-state">
+        <ion-icon name="book-outline" class="empty-icon"></ion-icon>
+        <h2>No hay materias</h2>
+        <p>
+          <span *ngIf="selectedSemester === 'all'; else semesterFilter">
+            Aún no has agregado ninguna materia.
+          </span>
+          <ng-template #semesterFilter>
+            No hay materias en el {{ selectedSemester }}° semestre.
+          </ng-template>
+        </p>
+        <ion-button 
+          (click)="goToAddSubject()" 
+          expand="block" 
+          class="add-first-subject-btn">
+          <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+          Agregar primera materia
+        </ion-button>
+      </div>
+    </ng-template>
+
+  </div>
+
+  <!-- FAB para agregar materia -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="goToAddSubject()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

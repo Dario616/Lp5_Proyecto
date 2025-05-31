@@ -1,0 +1,135 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Agregar Materia</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Información de la Materia</ion-card-title>
+        </ion-card-header>
+        
+        <ion-card-content>
+          
+          <!-- Nombre de la materia -->
+          <ion-item>
+            <ion-input 
+              formControlName="name"
+              label="Nombre de la materia"
+              labelPlacement="floating"
+              placeholder="Ej: Matemáticas I"
+              type="text">
+            </ion-input>
+          </ion-item>
+          
+          <!-- Código -->
+          <ion-item>
+            <ion-input 
+              formControlName="code"
+              label="Código"
+              labelPlacement="floating"
+              placeholder="Ej: MAT-101"
+              type="text">
+            </ion-input>
+          </ion-item>
+          
+          <!-- Descripción -->
+          <ion-item>
+            <ion-textarea 
+              formControlName="description"
+              label="Descripción"
+              labelPlacement="floating"
+              placeholder="Descripción opcional de la materia"
+              rows="3">
+            </ion-textarea>
+          </ion-item>
+          
+          <!-- Créditos -->
+          <ion-item>
+            <ion-input 
+              formControlName="credits"
+              label="Créditos"
+              labelPlacement="floating"
+              placeholder="Ej: 3"
+              type="number"
+              min="1"
+              max="10">
+            </ion-input>
+          </ion-item>
+          
+          <!-- Semestre -->
+          <ion-item>
+            <ion-select 
+              formControlName="semester"
+              label="Semestre"
+              labelPlacement="floating"
+              placeholder="Selecciona el semestre">
+              <ion-select-option value="1">1er Semestre</ion-select-option>
+              <ion-select-option value="2">2do Semestre</ion-select-option>
+              <ion-select-option value="3">3er Semestre</ion-select-option>
+              <ion-select-option value="4">4to Semestre</ion-select-option>
+              <ion-select-option value="5">5to Semestre</ion-select-option>
+              <ion-select-option value="6">6to Semestre</ion-select-option>
+              <ion-select-option value="7">7mo Semestre</ion-select-option>
+              <ion-select-option value="8">8vo Semestre</ion-select-option>
+              <ion-select-option value="9">9no Semestre</ion-select-option>
+              <ion-select-option value="10">10mo Semestre</ion-select-option>
+            </ion-select>
+          </ion-item>
+          
+          <!-- Profesor -->
+          <ion-item>
+            <ion-input 
+              formControlName="professor"
+              label="Profesor"
+              labelPlacement="floating"
+              placeholder="Nombre del profesor (opcional)"
+              type="text">
+            </ion-input>
+          </ion-item>
+          
+          <!-- Horario -->
+          <ion-item>
+            <ion-input 
+              formControlName="schedule"
+              label="Horario"
+              labelPlacement="floating"
+              placeholder="Ej: Lun-Mie-Vie 8:00-10:00"
+              type="text">
+            </ion-input>
+          </ion-item>
+          
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Botones -->
+      <div class="buttons-container">
+        <ion-button 
+          type="submit" 
+          expand="block" 
+          [disabled]="form.invalid"
+          class="submit-btn">
+          <ion-icon name="save-outline" slot="start"></ion-icon>
+          Guardar Materia
+        </ion-button>
+        
+        <ion-button 
+          expand="block" 
+          fill="outline" 
+          color="medium"
+          (click)="goBack()">
+          <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+          Cancelar
+        </ion-button>
+      </div>
+
+    </form>
+  </div>
+</ion-content>

@@ -1,0 +1,1405 @@
+// === VARIABLES CSS ===
+:root {
+  --task-pending-color: #3880ff;
+  --task-completed-color: #28ba62;
+  --task-overdue-color: #eb445a;
+  --task-mixed-color: #ffc409;
+  --task-today-color: #2dd36f;
+  --task-soon-color: #92949c;
+}
+
+// === ESTILOS PRINCIPALES ===
+
+.calendar-container {
+  .custom-calendar {
+    --background: transparent;
+    border-radius: 12px;
+
+    ion-datetime {
+      --ion-color-primary: #3880ff;
+      --ion-color-primary-rgb: 56, 128, 255;
+      --ion-color-primary-contrast: #ffffff;
+      --ion-color-primary-contrast-rgb: 255, 255, 255;
+      --ion-color-primary-shade: #3171e0;
+      --ion-color-primary-tint: #4c8dff;
+
+      // Personalizar días del calendario
+      .calendar-day {
+        position: relative;
+
+        // Badge para días con tareas
+        &[data-has-tasks="true"]::after {
+          content: "";
+          position: absolute;
+          top: 4px;
+          right: 4px;
+          width: 8px;
+          height: 8px;
+          background-color: var(--task-pending-color);
+          border-radius: 50%;
+          z-index: 10;
+          animation: pulse 2s infinite;
+        }
+
+        // Badge para días con todas las tareas completadas
+        &[data-all-completed="true"]::after {
+          background-color: var(--task-completed-color);
+          animation: none;
+        }
+
+        // Badge para días con tareas mixtas
+        &[data-mixed="true"]::after {
+          background: linear-gradient(
+            45deg,
+            var(--task-completed-color) 50%,
+            var(--task-pending-color) 50%
+          );
+          animation: none;
+        }
+
+        // Badge para días con tareas vencidas
+        &[data-overdue="true"]::after {
+          background-color: var(--task-overdue-color);
+          animation: urgent-pulse 1s infinite;
+        }
+      }
+    }
+  }
+}
+
+// === LEYENDA DEL CALENDARIO ===
+
+.calendar-legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+  padding: 12px;
+  background: var(--ion-color-light);
+  border-radius: 8px;
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--ion-color-dark);
+    padding: 4px 8px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.7);
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+
+      &.has-tasks {
+        background-color: var(--task-pending-color);
+        animation: pulse 2s infinite;
+      }
+
+      &.completed-tasks {
+        background-color: var(--task-completed-color);
+      }
+
+      &.mixed-tasks {
+        background: linear-gradient(
+          45deg,
+          var(--task-completed-color) 50%,
+          var(--task-pending-color) 50%
+        );
+      }
+
+      &.overdue-tasks {
+        background-color: var(--task-overdue-color);
+        animation: urgent-pulse 1s infinite;
+      }
+    }
+  }
+}
+
+// === NAVEGACIÓN DEL CALENDARIO ===
+
+.calendar-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  gap: 8px;
+
+  ion-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    font-size: 12px;
+    height: 32px;
+
+    ion-icon {
+      font-size: 16px;
+    }
+  }
+}
+
+// === RESUMEN DE TAREAS ===
+
+.task-summary {
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #1a202c, #2d3748);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+
+  .summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    h3 {
+      color: #000000;
+      margin: 0;
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+    }
+
+    ion-button {
+      --color: #000000;
+      --padding-start: 8px;
+      --padding-end: 8px;
+    }
+  }
+
+  .summary-stats {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 16px;
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+      padding: 12px 8px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      min-width: 70px;
+      transition: all 0.3s ease;
+
+      ion-icon {
+        font-size: 24px;
+        color: #000000;
+        filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.3));
+      }
+
+      span {
+        font-size: 12px;
+        font-weight: 700;
+        color: #000000;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  .progress-container {
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #10b981, #059669);
+        border-radius: 4px;
+        transition: width 0.3s ease;
+      }
+    }
+
+    .progress-text {
+      font-size: 12px;
+      color: #000000;
+      text-align: center;
+      display: block;
+      font-weight: 700;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+    }
+  }
+}
+
+// === ALERTA DE TAREAS VENCIDAS ===
+
+.overdue-alert {
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #ffebee, #ffcdd2);
+  border-left: 4px solid var(--task-overdue-color);
+
+  .alert-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    ion-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .text-black {
+  color: #000 !important;
+}
+
+    div {
+      flex: 1;
+
+      h4 {
+        margin: 0 0 4px 0;
+        color: var(--task-overdue-color);
+        font-weight: 600;
+      }
+
+      p {
+        margin: 0;
+        color: var(--ion-color-medium);
+        font-size: 14px;
+      }
+    }
+
+    ion-button {
+      flex-shrink: 0;
+    }
+  }
+}
+
+// === BOTÓN AGREGAR TAREA ===
+
+.add-task-btn {
+  height: 48px;
+  font-weight: 600;
+  --border-radius: 12px;
+
+  ion-icon {
+    font-size: 20px;
+  }
+}
+
+// === ESTADO VACÍO ===
+
+.empty-state {
+  padding: 32px 16px;
+
+  ion-icon {
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  p {
+    margin-bottom: 16px;
+    opacity: 0.7;
+  }
+}
+
+// === LISTA DE TAREAS ===
+
+.task-item {
+  --padding-start: 0px;
+  --padding-end: 0px;
+  --inner-padding-end: 0px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  background: var(--ion-color-light);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    --background: var(--ion-color-light-shade);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &.task-completed {
+    opacity: 0.7;
+
+    ion-label h3 {
+      text-decoration: line-through;
+      color: var(--ion-color-medium);
+    }
+  }
+
+  &.task-overdue {
+    border-left: 4px solid var(--task-overdue-color);
+    background: rgba(235, 68, 90, 0.05);
+  }
+
+  .task-priority-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: transparent;
+
+    &.high-priority {
+      background: var(--task-mixed-color);
+    }
+  }
+
+  ion-label {
+    padding: 16px;
+
+    h3 {
+      font-weight: 600;
+      color: var(--ion-color-dark);
+      margin-bottom: 8px;
+      font-size: 16px;
+      line-height: 1.3;
+
+      &.completed-task {
+        text-decoration: line-through;
+        color: var(--ion-color-medium);
+        opacity: 0.7;
+      }
+    }
+
+    .task-time {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--ion-color-primary);
+      font-weight: 500;
+      margin-bottom: 8px;
+
+      ion-icon {
+        font-size: 14px;
+      }
+
+      .task-duration {
+        color: var(--ion-color-medium);
+        font-weight: normal;
+        margin-left: 4px;
+      }
+    }
+
+    .task-description {
+      font-size: 14px;
+      color: var(--ion-color-medium);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .task-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+
+      .task-tag {
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+
+        &.overdue {
+          background: rgba(235, 68, 90, 0.1);
+          color: var(--task-overdue-color);
+        }
+
+        &.today {
+          background: rgba(45, 211, 111, 0.1);
+          color: var(--task-today-color);
+        }
+
+        &.soon {
+          background: rgba(146, 148, 156, 0.1);
+          color: var(--task-soon-color);
+        }
+      }
+    }
+  }
+
+  .task-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 16px 16px 16px 0;
+
+    .task-checkbox {
+      --size: 24px;
+      --checkbox-background-checked: var(--task-completed-color);
+      --border-color-checked: var(--task-completed-color);
+      margin-right: 8px;
+    }
+
+    ion-button {
+      --padding-start: 8px;
+      --padding-end: 8px;
+      height: 36px;
+
+      ion-icon {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+// === MODAL DE TAREA ===
+
+ion-modal {
+  ion-content {
+    ion-item {
+      --padding-start: 0;
+      --inner-padding-end: 0;
+      margin-bottom: 16px;
+      border-radius: 8px;
+
+      ion-input,
+      ion-textarea,
+      ion-datetime {
+        --padding-start: 16px;
+        --padding-end: 16px;
+      }
+    }
+
+    .time-warning {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: rgba(255, 196, 9, 0.1);
+      border-radius: 8px;
+      margin: 16px 0;
+
+      ion-icon {
+        font-size: 20px;
+      }
+
+      span {
+        font-size: 14px;
+        color: var(--task-mixed-color);
+        font-weight: 500;
+      }
+    }
+
+    ion-button[type="submit"] {
+      margin-top: 24px;
+      height: 48px;
+      font-weight: 600;
+      --border-radius: 12px;
+    }
+  }
+}
+
+// === ANIMACIONES ===
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes urgent-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(235, 68, 90, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    opacity: 0.8;
+    box-shadow: 0 0 0 8px rgba(235, 68, 90, 0);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(235, 68, 90, 0);
+  }
+}
+
+// Efectos de entrada
+.task-item {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// === TEMA OSCURO ===
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --task-pending-color: #4d8df0;
+    --task-completed-color: #2dd36f;
+    --task-overdue-color: #f04141;
+    --task-mixed-color: #ffc947;
+  }
+
+  .calendar-legend {
+    background: var(--ion-color-dark);
+
+    .legend-item {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--ion-color-light);
+    }
+  }
+
+  .task-summary {
+    background: linear-gradient(
+      135deg,
+      rgba(72, 138, 255, 0.2),
+      rgba(16, 220, 156, 0.2)
+    );
+  }
+
+  .task-item {
+    background: var(--ion-color-dark);
+
+    ion-label h3 {
+      color: var(--ion-color-light);
+    }
+
+    &.task-overdue {
+      background: rgba(240, 65, 65, 0.1);
+    }
+  }
+
+  .overdue-alert {
+    background: linear-gradient(
+      135deg,
+      rgba(240, 65, 65, 0.1),
+      rgba(240, 65, 65, 0.05)
+    );
+  }
+}
+
+// === RESPONSIVE ===
+
+@media (max-width: 768px) {
+  .calendar-legend {
+    .legend-item {
+      font-size: 10px;
+      gap: 4px;
+      padding: 3px 6px;
+
+      .legend-dot {
+        width: 6px;
+        height: 6px;
+      }
+    }
+  }
+
+  .calendar-navigation {
+    flex-direction: column;
+    gap: 8px;
+
+    ion-button {
+      font-size: 11px;
+      height: 28px;
+    }
+  }
+
+  .summary-stats {
+    gap: 8px;
+
+    .stat-item {
+      min-width: 60px;
+      padding: 8px 4px;
+
+      ion-icon {
+        font-size: 20px;
+      }
+
+      span {
+        font-size: 10px;
+      }
+    }
+  }
+
+  .task-item {
+    ion-label {
+      padding: 12px;
+
+      h3 {
+        font-size: 15px;
+      }
+
+      .task-time {
+        font-size: 12px;
+      }
+
+      .task-description {
+        font-size: 13px;
+      }
+    }
+
+    .task-actions {
+      padding: 12px 12px 12px 0;
+
+      ion-button {
+        height: 32px;
+
+        ion-icon {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .summary-stats {
+    flex-direction: column;
+    gap: 12px;
+
+    .stat-item {
+      flex-direction: row;
+      min-width: auto;
+      width: 100%;
+      padding: 8px 12px;
+
+      span {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .task-actions {
+    flex-direction: column;
+    gap: 4px;
+
+    ion-button {
+      width: 100%;
+      margin: 0;
+    }
+  }
+}
+
+// === ACCESIBILIDAD ===
+
+@media (prefers-reduced-motion: reduce) {
+  .legend-dot,
+  .calendar-day::after,
+  .task-item {
+    animation: none !important;
+  }
+
+  .task-item {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+// Contraste alto
+@media (prefers-contrast: high) {
+  .legend-dot {
+    border: 2px solid currentColor;
+  }
+
+  .task-item {
+    border: 1px solid var(--ion-color-medium);
+
+    &.task-overdue {
+      border-color: var(--task-overdue-color);
+      border-width: 2px;
+    }
+  }
+
+  .task-tag {
+    border: 1px solid currentColor;
+  }
+}
+
+// === UTILIDADES ===
+
+.ion-text-center {
+  text-align: center;
+}
+
+.ion-margin-bottom {
+  margin-bottom: 16px;
+}
+
+.ion-margin-top {
+  margin-top: 16px;
+}
+
+.ion-padding {
+  padding: 16px;
+}
+
+* {
+  color: #000 !important;
+}
+
+// === ESTILOS EXISTENTES MANTENIDOS ===
+
+.calendar-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.custom-calendar {
+  width: 100%;
+  --border-radius: 16px;
+}
+
+.calendar-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  gap: 10px;
+  
+  ion-button {
+    --border-radius: 20px;
+    font-size: 0.8rem;
+  }
+}
+
+.task-summary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 16px;
+  margin: 20px 0;
+  
+  .summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    
+    h3 {
+      margin: 0;
+      font-weight: 600;
+    }
+  }
+  
+  .summary-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+    
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      ion-icon {
+        font-size: 1.2rem;
+      }
+      
+      span {
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+    }
+  }
+  
+  .progress-container {
+    margin-top: 15px;
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      overflow: hidden;
+      
+      .progress-fill {
+        height: 100%;
+        background-color: white;
+        border-radius: 4px;
+        transition: width 0.3s ease;
+      }
+    }
+    
+    .progress-text {
+      display: block;
+      text-align: center;
+      margin-top: 8px;
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+  }
+}
+
+.overdue-alert {
+  background: linear-gradient(135deg, #ff9a8b 0%, #ff6a88 100%);
+  color: white;
+  border-radius: 16px;
+  margin: 15px 0;
+  
+  .alert-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    
+    ion-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+    
+    div {
+      flex: 1;
+      
+      h4 {
+        margin: 0 0 5px 0;
+        font-weight: 600;
+      }
+      
+      p {
+        margin: 0;
+        opacity: 0.9;
+      }
+    }
+  }
+}
+
+.add-task-btn {
+  --border-radius: 25px;
+  height: 50px;
+  font-weight: 600;
+  --box-shadow: 0 4px 16px rgba(var(--ion-color-primary-rgb), 0.4);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  
+  ion-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.6;
+  }
+  
+  p {
+    font-size: 1rem;
+    margin-bottom: 25px;
+    opacity: 0.7;
+  }
+  
+  ion-button {
+    --border-radius: 20px;
+  }
+}
+
+// === NUEVOS ESTILOS PARA INTEGRACIÓN ===
+
+// Filtros activos
+.filter-info {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  border-radius: 16px;
+  margin-bottom: 20px;
+  
+  .active-filters {
+    h4 {
+      margin: 0 0 12px 0;
+      color: var(--ion-color-dark);
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    
+    .filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      
+      ion-chip {
+        margin: 0;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+        
+        &:hover {
+          transform: scale(1.05);
+        }
+        
+        ion-icon {
+          margin-right: 4px;
+          
+          &:last-child {
+            margin-left: 4px;
+            margin-right: 0;
+          }
+        }
+      }
+      
+      ion-button {
+        --border-radius: 15px;
+        height: 32px;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+// Estilos de tareas mejorados
+.task-item {
+  --border-radius: 16px;
+  --padding-start: 0;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  &.task-completed {
+    opacity: 0.7;
+    
+    ion-label h3 {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+  }
+  
+  &.task-overdue:not(.task-completed) {
+    --border-start-color: var(--ion-color-danger);
+    --border-start-width: 4px;
+    
+    .task-priority-indicator {
+      background: var(--ion-color-danger);
+    }
+  }
+  
+  // Indicador de prioridad
+  .task-priority-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--ion-color-light);
+    transition: background 0.3s ease;
+    
+    &.high-priority {
+      background: var(--ion-color-danger);
+    }
+    
+    &.medium-priority {
+      background: var(--ion-color-warning);
+    }
+    
+    &.low-priority {
+      background: var(--ion-color-success);
+    }
+  }
+  
+  // Indicador de categoría
+  .task-category-indicator {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--ion-color-primary-rgb), 0.1);
+    
+    ion-icon {
+      font-size: 1.1rem;
+    }
+  }
+  
+  ion-label {
+    margin-left: 50px;
+    
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--ion-color-dark);
+      
+      &.completed-task {
+        color: var(--ion-color-medium);
+      }
+    }
+    
+    .task-time {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      color: var(--ion-color-medium);
+      font-size: 0.9rem;
+      
+      ion-icon {
+        font-size: 0.9rem;
+      }
+      
+      .task-duration {
+        font-weight: 500;
+        color: var(--ion-color-primary);
+      }
+    }
+    
+    .task-description {
+      color: var(--ion-color-medium);
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    
+    // Metadata de categoría y materia
+    .task-metadata {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+      
+      .category-chip,
+      .subject-chip,
+      .priority-chip {
+        height: 24px;
+        font-size: 0.75rem;
+        margin: 0;
+        
+        ion-icon {
+          font-size: 0.8rem;
+          margin-right: 3px;
+        }
+      }
+      
+      .category-chip {
+        --background: rgba(var(--ion-color-primary-rgb), 0.15);
+        --color: var(--ion-color-primary);
+      }
+      
+      .subject-chip {
+        --background: rgba(var(--ion-color-secondary-rgb), 0.15);
+        --color: var(--ion-color-secondary);
+      }
+      
+      .priority-chip {
+        font-weight: 500;
+      }
+    }
+    
+    .task-tags {
+      display: flex;
+      gap: 6px;
+      
+      .task-tag {
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        font-weight: 500;
+        
+        &.overdue {
+          background: rgba(var(--ion-color-danger-rgb), 0.15);
+          color: var(--ion-color-danger);
+        }
+        
+        &.today {
+          background: rgba(var(--ion-color-warning-rgb), 0.15);
+          color: var(--ion-color-warning);
+        }
+        
+        &.soon {
+          background: rgba(var(--ion-color-primary-rgb), 0.15);
+          color: var(--ion-color-primary);
+        }
+      }
+    }
+  }
+  
+  .task-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    
+    .task-checkbox {
+      margin-right: 8px;
+    }
+    
+    ion-button {
+      --border-radius: 50%;
+      width: 36px;
+      height: 36px;
+    }
+  }
+}
+
+// Estilos del modal de tarea
+.task-modal {
+  ion-card {
+    margin-bottom: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    
+    ion-card-header {
+      padding-bottom: 10px;
+      
+      ion-card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--ion-color-primary);
+      }
+    }
+    
+    ion-item {
+      --border-radius: 12px;
+      --padding-start: 16px;
+      --padding-end: 16px;
+      --background: var(--ion-color-light);
+      margin-bottom: 12px;
+      
+      &.item-has-focus {
+        --border-color: var(--ion-color-primary);
+        --highlight-color: var(--ion-color-primary);
+      }
+    }
+  }
+  
+  // Vista previa de categoría
+  .category-preview,
+  .subject-preview {
+    padding: 12px 16px;
+    
+    ion-chip {
+      margin: 0;
+    }
+    
+    .subject-details {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: var(--ion-color-medium);
+      margin-bottom: 0;
+    }
+  }
+  
+  // Opciones de categoría en el select
+  .category-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    ion-icon {
+      font-size: 1rem;
+    }
+  }
+  
+  .time-warning {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(var(--ion-color-warning-rgb), 0.1);
+    border-radius: 8px;
+    margin: 15px 0;
+    
+    ion-icon {
+      color: var(--ion-color-warning);
+    }
+    
+    span {
+      color: var(--ion-color-warning);
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// Estilos del modal de filtros
+.filter-modal {
+  ion-card {
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    
+    ion-item {
+      --border-radius: 12px;
+      --padding-start: 16px;
+      --padding-end: 16px;
+      --background: var(--ion-color-light);
+      margin-bottom: 12px;
+    }
+  }
+  
+  ion-button {
+    --border-radius: 25px;
+    height: 48px;
+    font-weight: 600;
+  }
+}
+
+// Animaciones
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.task-item {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .calendar-container {
+    padding: 0 10px;
+  }
+  
+  .calendar-navigation {
+    flex-direction: column;
+    gap: 8px;
+    
+    ion-button {
+      width: 100%;
+    }
+  }
+  
+  .summary-stats {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    
+    .stat-item {
+      justify-content: center;
+    }
+  }
+  
+  .task-item {
+    .task-category-indicator {
+      width: 30px;
+      height: 30px;
+      left: 6px;
+      
+      ion-icon {
+        font-size: 0.9rem;
+      }
+    }
+    
+    ion-label {
+      margin-left: 40px;
+    }
+    
+    .task-metadata {
+      .category-chip,
+      .subject-chip,
+      .priority-chip {
+        height: 22px;
+        font-size: 0.7rem;
+      }
+    }
+    
+    .task-actions {
+      flex-direction: column;
+      gap: 2px;
+      
+      ion-button {
+        width: 32px;
+        height: 32px;
+      }
+    }
+  }
+  
+  .filter-chips {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .task-item {
+    .task-metadata {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .task-actions {
+      .task-checkbox {
+        margin-right: 4px;
+      }
+    }
+  }
+  
+  .add-task-btn {
+    height: 45px;
+    font-size: 0.9rem;
+  }
+}
+
+// Mejoras de accesibilidad
+.task-item {
+  &:focus-within {
+    --box-shadow: 0 0 0 2px var(--ion-color-primary);
+    outline: none;
+  }
+}
+
+ion-chip {
+  &:focus {
+    outline: 2px solid var(--ion-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+// Estados hover mejorados
+.task-item:hover {
+  .task-category-indicator {
+    transform: translateY(-50%) scale(1.1);
+  }
+  
+  .task-actions ion-button {
+    --background: rgba(var(--ion-color-primary-rgb), 0.1);
+  }
+}
+
+// Personalización de colores de categorías
+.task-item {
+  &[data-category-color="primary"] .task-category-indicator {
+    background: rgba(var(--ion-color-primary-rgb), 0.15);
+  }
+  
+  &[data-category-color="success"] .task-category-indicator {
+    background: rgba(var(--ion-color-success-rgb), 0.15);
+  }
+  
+  &[data-category-color="danger"] .task-category-indicator {
+    background: rgba(var(--ion-color-danger-rgb), 0.15);
+  }
+  
+  &[data-category-color="warning"] .task-category-indicator {
+    background: rgba(var(--ion-color-warning-rgb), 0.15);
+  }
+}

@@ -1,0 +1,188 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Categorías</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goToAddCategory()">
+        <ion-icon name="add" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    
+    <!-- Información de categorías -->
+    <ion-card class="info-card">
+      <ion-card-content>
+        <div class="stats-row">
+          <div class="stat-item">
+            <ion-icon name="pricetags-outline"></ion-icon>
+            <div>
+              <span class="stat-number">{{ categories.length }}</span>
+              <span class="stat-label">Categorías</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+            <div>
+              <span class="stat-number">{{ getUsedCategoriesCount() }}</span>
+              <span class="stat-label">En uso</span>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Lista de categorías -->
+    <div *ngIf="categories.length > 0; else noCategories">
+      
+      <!-- Categorías por defecto -->
+      <div class="section-header" *ngIf="getDefaultCategories().length > 0">
+        <h3>Categorías del Sistema</h3>
+        <p>Categorías predefinidas</p>
+      </div>
+      
+      <ion-card 
+        *ngFor="let category of getDefaultCategories()" 
+        class="category-card"
+        [attr.data-color]="category.color">
+        <ion-card-content>
+          <div class="category-header">
+            <div class="category-info">
+              <div class="category-icon-container" [attr.data-color]="category.color">
+                <ion-icon [name]="category.icon" [color]="category.color"></ion-icon>
+              </div>
+              <div class="category-details">
+                <h3>{{ category.name }}</h3>
+                <p *ngIf="category.description">{{ category.description }}</p>
+                <div class="usage-info">
+                  <ion-chip [color]="category.taskCount > 0 ? 'success' : 'medium'" size="small">
+                    <ion-icon name="document-text-outline"></ion-icon>
+                    <ion-label>{{ category.taskCount }} tarea(s)</ion-label>
+                  </ion-chip>
+                  <ion-chip color="secondary" size="small">
+                    <ion-label>Sistema</ion-label>
+                  </ion-chip>
+                </div>
+              </div>
+            </div>
+            
+            <div class="category-actions">
+              <ion-button 
+                size="small" 
+                fill="outline" 
+                (click)="editCategory(category)">
+                <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+              
+              <ion-button 
+                size="small" 
+                fill="outline" 
+                color="medium"
+                (click)="duplicateCategory(category)">
+                <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Categorías personalizadas -->
+      <div class="section-header" *ngIf="getCustomCategories().length > 0">
+        <h3>Mis Categorías</h3>
+        <p>Categorías personalizadas</p>
+      </div>
+      
+      <ion-card 
+        *ngFor="let category of getCustomCategories()" 
+        class="category-card custom-category"
+        [attr.data-color]="category.color">
+        <ion-card-content>
+          <div class="category-header">
+            <div class="category-info">
+              <div class="category-icon-container" [attr.data-color]="category.color">
+                <ion-icon [name]="category.icon" [color]="category.color"></ion-icon>
+              </div>
+              <div class="category-details">
+                <h3>{{ category.name }}</h3>
+                <p *ngIf="category.description">{{ category.description }}</p>
+                <div class="usage-info">
+                  <ion-chip [color]="category.taskCount > 0 ? 'success' : 'medium'" size="small">
+                    <ion-icon name="document-text-outline"></ion-icon>
+                    <ion-label>{{ category.taskCount }} tarea(s)</ion-label>
+                  </ion-chip>
+                  <ion-chip color="tertiary" size="small">
+                    <ion-label>Personal</ion-label>
+                  </ion-chip>
+                </div>
+              </div>
+            </div>
+            
+            <div class="category-actions">
+              <ion-button 
+                size="small" 
+                fill="outline" 
+                (click)="editCategory(category)">
+                <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+              
+              <ion-button 
+                size="small" 
+                fill="outline" 
+                color="medium"
+                (click)="duplicateCategory(category)">
+                <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+              
+              <ion-button 
+                size="small" 
+                fill="outline" 
+                color="danger"
+                [disabled]="category.taskCount > 0"
+                (click)="confirmDelete(category)">
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Estado vacío -->
+    <ng-template #noCategories>
+      <div class="empty-state">
+        <ion-icon name="pricetags-outline" class="empty-icon"></ion-icon>
+        <h2>No hay categorías</h2>
+        <p>Las categorías te ayudan a organizar mejor tus tareas.</p>
+        <ion-button 
+          (click)="initializeDefaultCategories()" 
+          expand="block" 
+          class="init-btn">
+          <ion-icon name="download-outline" slot="start"></ion-icon>
+          Cargar categorías por defecto
+        </ion-button>
+        <ion-button 
+          (click)="goToAddCategory()" 
+          expand="block" 
+          fill="outline"
+          class="add-custom-btn">
+          <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+          Crear mi primera categoría
+        </ion-button>
+      </div>
+    </ng-template>
+
+  </div>
+
+  <!-- FAB para agregar categoría -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="goToAddCategory()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
